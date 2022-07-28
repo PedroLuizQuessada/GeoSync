@@ -1,6 +1,8 @@
 package com.quess.geosync.ponto;
 
+import com.quess.geosync.usuario.Usuario;
 import com.quess.geosync.usuario.UsuarioNaoEncontradoException;
+import com.quess.geosync.usuario.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +14,11 @@ import java.util.List;
 @Controller
 public class PontoController {
     private final PontoService service;
+    private final UsuarioService usuarioService;
 
-    public PontoController(PontoService service) {
+    public PontoController(PontoService service, UsuarioService usuarioService) {
         this.service = service;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping("/pontos/{ativo}")
@@ -22,6 +26,13 @@ public class PontoController {
         List<Ponto> listPontos = service.listAll(ativo);
         model.addAttribute("listPontos", listPontos);
         model.addAttribute("ativos", ativo);
+
+        try {
+            Integer idCentral = usuarioService.getCentral(usuarioService.getUsuarioLogado().getId());
+            model.addAttribute("central", idCentral);
+        }
+        catch (UsuarioNaoEncontradoException | PontoNaoEncontradoException ignored) {}
+
         return "pontos";
     }
 
@@ -58,10 +69,15 @@ public class PontoController {
         return "redirect:/pontos/true";
     }
 
-    @GetMapping("/pontos/adotarcentral/{idusuario}/{idcentral}")
-    public String adotarCentral(@PathVariable("idusuario") Integer idUsuario, @PathVariable("idcentral") Integer idCentral, RedirectAttributes ra) {
+    @GetMapping("/pontos/adotarcentral/{idcentral}")
+    public String adotarCentral(@PathVariable("idcentral") Integer idCentral, RedirectAttributes ra) {
         try {
-            service.adotarCentral(idUsuario, idCentral);
+            Usuario usuarioLogado = usuarioService.getUsuarioLogado();
+            if (usuarioLogado == null) {
+                throw new UsuarioNaoEncontradoException();
+            }
+
+            service.adotarCentral(usuarioLogado.getId(), idCentral);
             ra.addFlashAttribute("messageSucess", String.format("Central %d adotada para o seu usuário", idCentral));
         }
         catch (UsuarioNaoEncontradoException | PontoNaoEncontradoException e) {
