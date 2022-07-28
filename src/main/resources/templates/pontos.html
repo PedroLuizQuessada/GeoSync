@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Pontos</title>
+</head>
+<body>
+    <div class="container-fluid text-center">
+        <div>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Deslogar">
+            </form>
+        </div>
+
+        <div><h1>Pontos</h1></div>
+        <div class="m-2">
+            <a class="h3" th:href="@{/usuarios}">Gerenciar usuários</a>
+        </div>
+        <div class="m-2">
+            <input type="checkbox" id="ativos" th:checked="${ativos}"><label for="ativos" class="m-2">Ativos</label>
+        </div>
+
+        <div th:if="${messageSucess}" class="alert alert-success alert-dismissible text-center" role="alert">
+            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            [[${messageSucess}]]
+        </div>
+
+        <div th:if="${messageError}" class="alert alert-warning alert-dismissible text-center" role="alert">
+            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            [[${messageError}]]
+        </div>
+
+        <div>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="ponto : ${listPontos}">
+                        <tr>
+                            <td>[[${ponto.id}]]</td>
+                            <td><input th:id="${ponto.id}" type="text" th:value="${ponto.nome}"></td>
+                            <td>
+                                <a class="h4 mr-3" th:href="@{'/pontos/ativotoggle/' + ${ponto.id}}">Consultar</a>
+                                <button class="btn btn-primary m-3" th:data-name="${ponto.id}" th:onclick="renomear(this.getAttribute('data-name'))">Renomear</button>
+                                <a th:if="${ponto.ativo}" class="h4 mr-3" th:href="@{'/pontos/ativotoggle/' + ${ponto.id}}">Inativar</a>
+                                <a th:if="${!ponto.ativo}" class="h4 mr-3" th:href="@{'/pontos/ativotoggle/' + ${ponto.id}}">Ativar</a>
+                                <a th:if="${true}" class="h4 mr-3" th:href="@{'/pontos/adotarcentral/' + ${ponto.id}}">Adotar central</a>
+                                <a th:if="${!true}" class="h4 mr-3" th:href="@{'/usuarios/admtoggle/' + ${ponto.id}}">Remover centrar</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#ativos").click(function () {
+                if ($(this).is(":checked")) {
+                    window.location.replace("http://localhost:8080/pontos/true");
+                } else {
+                    window.location.replace("http://localhost:8080/pontos/false");
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function renomear(id) {
+            window.location.replace("http://localhost:8080/pontos/renomear/" + id + "/" + document.getElementById(id).value);
+        }
+    </script>
+</body>
+</html>

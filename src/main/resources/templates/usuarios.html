@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Usuários</title>
+</head>
+<body>
+    <div class="container-fluid text-center">
+        <div><h1>Usuários</h1></div>
+        <div class="m-2">
+            <a class="h3" th:href="@{/voltar/usuarios}">Voltar</a>
+        </div>
+        <div class="m-2">
+            <a class="h3" th:href="@{/usuarios/new}">Adicionar usuário</a>
+        </div>
+
+        <div th:if="${messageSucess}" class="alert alert-success alert-dismissible text-center" role="alert">
+            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            [[${messageSucess}]]
+        </div>
+
+        <div th:if="${messageError}" class="alert alert-warning alert-dismissible text-center" role="alert">
+            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            [[${messageError}]]
+        </div>
+
+        <div>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Central</th>
+                        <th>ADM</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="usuario : ${listUsuarios}">
+                        <tr>
+                            <td>[[${usuario.id}]]</td>
+                            <td>[[${usuario.nome}]]</td>
+                            <td>[[${usuario.email}]]</td>
+                            <td>[[${usuario.central.nome}]]</td>
+                            <td><input type="checkbox" th:checked="${usuario.adm}" disabled/></td>
+                            <td>
+                                <a class="h4 mr-3" th:href="@{'/usuarios/edit/' + ${usuario.id}}">Editar</a>
+                                <a th:if="${usuario.tentativasAcesso} < 3" class="h4 mr-3" th:href="@{'/usuarios/blocktoggle/' + ${usuario.id}}">Bloquear</a>
+                                <a th:if="${usuario.tentativasAcesso} == 3" class="h4 mr-3" th:href="@{'/usuarios/blocktoggle/' + ${usuario.id}}">Desbloquear</a>
+                                <a th:if="${usuario.adm}" class="h4 mr-3" th:href="@{'/usuarios/admtoggle/' + ${usuario.id}}">Retirar ADM</a>
+                                <a th:if="${!usuario.adm}" class="h4 mr-3" th:href="@{'/usuarios/admtoggle/' + ${usuario.id}}">Tornar ADM</a>
+                                <a class="h4" th:href="@{'/usuarios/delete/' + ${usuario.id}}">Deletar</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
