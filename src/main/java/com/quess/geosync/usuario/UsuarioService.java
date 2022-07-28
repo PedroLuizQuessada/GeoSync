@@ -3,6 +3,9 @@ package com.quess.geosync.usuario;
 import com.quess.geosync.ponto.Ponto;
 import com.quess.geosync.ponto.PontoNaoEncontradoException;
 import com.quess.geosync.ponto.PontoRepository;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +39,15 @@ public class UsuarioService {
         }
     }
 
+    public Usuario getUsuarioLogado() throws UsuarioNaoEncontradoException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String emailUsuarioLogado = authentication.getName();
+            return repo.findByEmail(emailUsuarioLogado);
+        }
+        return null;
+    }
+
     public void delete(Integer id) throws UsuarioNaoEncontradoException {
         get(id);
         repo.deleteById(id);
@@ -60,7 +72,7 @@ public class UsuarioService {
         return usuario.isAdm();
     }
 
-    public String getCentral(Integer id) throws UsuarioNaoEncontradoException, PontoNaoEncontradoException {
+    public Integer getCentral(Integer id) throws UsuarioNaoEncontradoException, PontoNaoEncontradoException {
         Usuario usuario = get(id);
         Integer centralId = usuario.getCentral().getId();
 
@@ -69,6 +81,6 @@ public class UsuarioService {
             throw new PontoNaoEncontradoException(centralId);
         }
 
-        return optionalPonto.get().getNome();
+        return optionalPonto.get().getId();
     }
 }
