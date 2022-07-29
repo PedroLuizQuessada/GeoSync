@@ -1,5 +1,7 @@
 package com.quess.geosync;
 
+import com.quess.geosync.ponto.Ponto;
+import com.quess.geosync.ponto.PontoRepository;
 import com.quess.geosync.usuario.Usuario;
 import com.quess.geosync.usuario.UsuarioRepository;
 import com.quess.geosync.util.SenhaUtil;
@@ -19,6 +21,9 @@ public class UsarioRepositoryTests {
     @Autowired
     private UsuarioRepository repo;
 
+    @Autowired
+    private PontoRepository pontoRepositorio;
+
     @Test
     public void testAddNew() {
         String senha = "boov2305";
@@ -28,6 +33,10 @@ public class UsarioRepositoryTests {
         usuario.setEmail("moraes.jjoyce@gmail.com");
         usuario.setSenha(SenhaUtil.criptografar(senha));
         usuario.setTentativasAcesso(0);
+
+        Optional<Ponto> optionalPonto = pontoRepositorio.findById(1);
+        Assertions.assertThat(optionalPonto).isPresent();
+        usuario.setCentral(optionalPonto.get());
 
         Usuario usuarioSalvo = repo.save(usuario);
 
