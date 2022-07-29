@@ -1,4 +1,4 @@
-package com.quess.geosync.ponto;
+package com.quess.geosync.beans.ponto;
 
 import org.springframework.data.repository.CrudRepository;
 

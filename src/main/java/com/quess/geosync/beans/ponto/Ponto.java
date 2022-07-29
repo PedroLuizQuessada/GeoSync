@@ -1,6 +1,6 @@
-package com.quess.geosync.ponto;
+package com.quess.geosync.beans.ponto;
 
-import com.quess.geosync.usuario.Usuario;
+import com.quess.geosync.beans.usuario.Usuario;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,6 +20,9 @@ public class Ponto {
 
     @OneToMany
     private List<Usuario> usuarios;
+
+    @Column
+    private String sensores;
 
     public Integer getId() {
         return id;
@@ -47,5 +50,18 @@ public class Ponto {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public String getSensores() {
+        if (sensores == null) {
+            return "";
+        }
+        else {
+            return sensores;
+        }
+    }
+
+    public void setSensores(String sensores) {
+        this.sensores = sensores;
     }
 }

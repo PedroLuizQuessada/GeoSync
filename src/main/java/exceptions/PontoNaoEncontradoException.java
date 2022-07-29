@@ -1,4 +1,4 @@
-package com.quess.geosync.ponto;
+package exceptions;
 
 public class PontoNaoEncontradoException extends Exception {
     public PontoNaoEncontradoException(Integer id) {

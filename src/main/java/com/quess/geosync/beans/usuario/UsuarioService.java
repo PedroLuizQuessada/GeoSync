@@ -1,8 +1,9 @@
-package com.quess.geosync.usuario;
+package com.quess.geosync.beans.usuario;
 
-import com.quess.geosync.ponto.Ponto;
-import com.quess.geosync.ponto.PontoNaoEncontradoException;
-import com.quess.geosync.ponto.PontoRepository;
+import com.quess.geosync.beans.ponto.Ponto;
+import exceptions.PontoNaoEncontradoException;
+import com.quess.geosync.beans.ponto.PontoRepository;
+import exceptions.UsuarioNaoEncontradoException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +23,7 @@ public class UsuarioService {
     }
 
     public List<Usuario> listAll() {
-        return repo.findAll();
+        return (List<Usuario>) repo.findAll();
     }
 
     public void save(Usuario usuario) {

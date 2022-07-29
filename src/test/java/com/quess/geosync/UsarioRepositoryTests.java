@@ -1,9 +1,9 @@
 package com.quess.geosync;
 
-import com.quess.geosync.ponto.Ponto;
-import com.quess.geosync.ponto.PontoRepository;
-import com.quess.geosync.usuario.Usuario;
-import com.quess.geosync.usuario.UsuarioRepository;
+import com.quess.geosync.beans.ponto.Ponto;
+import com.quess.geosync.beans.ponto.PontoRepository;
+import com.quess.geosync.beans.usuario.Usuario;
+import com.quess.geosync.beans.usuario.UsuarioRepository;
 import com.quess.geosync.util.SenhaUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

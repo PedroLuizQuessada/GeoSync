@@ -1,4 +1,4 @@
-package com.quess.geosync.usuario;
+package com.quess.geosync.beans.usuario;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

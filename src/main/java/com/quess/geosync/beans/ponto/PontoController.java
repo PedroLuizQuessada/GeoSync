@@ -1,31 +1,33 @@
-package com.quess.geosync.ponto;
+package com.quess.geosync.beans.ponto;
 
-import com.quess.geosync.usuario.Usuario;
-import com.quess.geosync.usuario.UsuarioNaoEncontradoException;
-import com.quess.geosync.usuario.UsuarioService;
+import com.quess.geosync.beans.sensor.SensorService;
+import com.quess.geosync.beans.usuario.Usuario;
+import exceptions.UsuarioNaoEncontradoException;
+import com.quess.geosync.beans.usuario.UsuarioService;
+import exceptions.PontoNaoEncontradoException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
 @Controller
 public class PontoController {
     private final PontoService service;
     private final UsuarioService usuarioService;
+    private final SensorService sensorService;
 
-    public PontoController(PontoService service, UsuarioService usuarioService) {
+    public PontoController(PontoService service, UsuarioService usuarioService, SensorService sensorService) {
         this.service = service;
         this.usuarioService = usuarioService;
+        this.sensorService = sensorService;
     }
 
     @GetMapping("/pontos/{ativo}")
     public String showPontosList(@PathVariable("ativo") boolean ativo, Model model) {
-        List<Ponto> listPontos = service.listAll(ativo);
-        model.addAttribute("listPontos", listPontos);
+        model.addAttribute("listPontos", service.listAll(ativo));
         model.addAttribute("ativos", ativo);
+        model.addAttribute("listSensores", sensorService.listAll());
 
         try {
             Integer idCentral = usuarioService.getCentral(usuarioService.getUsuarioLogado().getId());

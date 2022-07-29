@@ -1,7 +1,7 @@
 package com.quess.geosync.main;
 
-import com.quess.geosync.usuario.CustomUsuarioDetailsService;
-import com.quess.geosync.usuario.UsuarioRepository;
+import com.quess.geosync.beans.usuario.CustomUsuarioDetailsService;
+import com.quess.geosync.beans.usuario.UsuarioRepository;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

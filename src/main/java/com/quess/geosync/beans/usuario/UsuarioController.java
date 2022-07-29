@@ -1,7 +1,8 @@
-package com.quess.geosync.usuario;
+package com.quess.geosync.beans.usuario;
 
-import com.quess.geosync.ponto.PontoService;
+import com.quess.geosync.beans.ponto.PontoService;
 import com.quess.geosync.util.SenhaUtil;
+import exceptions.UsuarioNaoEncontradoException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
