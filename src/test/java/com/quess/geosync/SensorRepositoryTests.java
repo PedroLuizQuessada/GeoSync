@@ -1,7 +1,7 @@
 package com.quess.geosync;
 
-import com.quess.geosync.beans.ponto.Ponto;
-import com.quess.geosync.beans.ponto.PontoRepository;
+import com.quess.geosync.beans.sensor.Sensor;
+import com.quess.geosync.beans.sensor.SensorRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +12,18 @@ import org.springframework.test.annotation.Rollback;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(value = false)
-public class PontoRepositoryTests {
+public class SensorRepositoryTests {
     @Autowired
-    private PontoRepository repo;
+    private SensorRepository repo;
 
     @Test
     public void testAddNew() {
-        Ponto ponto = new Ponto();
-        ponto.setNome("Motoboy A");
-        ponto.setAtivo(false);
+        Sensor sensor = new Sensor();
+        sensor.setNome("GPS");
 
-        Ponto pontoSalvo = repo.save(ponto);
+        Sensor sensorSalvo = repo.save(sensor);
 
-        Assertions.assertThat(pontoSalvo.getId()).isNotNull();
-        Assertions.assertThat(pontoSalvo.getId()).isGreaterThan(0);
+        Assertions.assertThat(sensorSalvo.getId()).isNotNull();
+        Assertions.assertThat(sensorSalvo.getId()).isGreaterThan(0);
     }
 }

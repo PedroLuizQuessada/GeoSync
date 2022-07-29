@@ -1,6 +1,6 @@
-package com.quess.geosync.usuario;
+package com.quess.geosync.beans.usuario;
 
-import com.quess.geosync.ponto.Ponto;
+import com.quess.geosync.beans.ponto.Ponto;
 
 import javax.persistence.*;
 

@@ -1,8 +1,9 @@
-package com.quess.geosync.ponto;
+package com.quess.geosync.beans.ponto;
 
-import com.quess.geosync.usuario.Usuario;
-import com.quess.geosync.usuario.UsuarioNaoEncontradoException;
-import com.quess.geosync.usuario.UsuarioService;
+import com.quess.geosync.beans.usuario.Usuario;
+import exceptions.UsuarioNaoEncontradoException;
+import com.quess.geosync.beans.usuario.UsuarioService;
+import exceptions.PontoNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +34,10 @@ public class PontoService {
         else {
             throw new PontoNaoEncontradoException(id);
         }
+    }
+
+    public void salvar(Ponto ponto) {
+        repo.save(ponto);
     }
 
     public boolean ativoToggle(Integer id) throws PontoNaoEncontradoException {

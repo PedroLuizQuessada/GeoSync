@@ -40,6 +40,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
+                        <th>Sensores</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -48,6 +49,13 @@
                         <tr>
                             <td>[[${ponto.id}]]</td>
                             <td><input th:id="${ponto.id}" type="text" th:value="${ponto.nome}"></td>
+                            <td>
+                                <th:block th:each="sensor : ${listSensores}">
+                                    <input th:name="'sensor' + ${sensor.id}" th:id="'sensor' + ${sensor.id}" type="checkbox" th:data-name="${ponto.id}" onclick="ativarSensor(this)" th:checked="${ponto.sensores.contains(sensor.id.toString())}">
+                                    <label th:for="'sensor' + ${sensor.id}" th:text="${sensor.nome}"></label>
+                                    <br>
+                                </th:block>
+                            </td>
                             <td>
                                 <a class="h4 mr-3" th:href="@{'/pontos/ativotoggle/' + ${ponto.id}}">Consultar</a>
                                 <button class="btn btn-primary m-3" th:data-name="${ponto.id}" th:onclick="renomear(this.getAttribute('data-name'))">Renomear</button>
@@ -78,6 +86,12 @@
     <script>
         function renomear(id) {
             window.location.replace("http://localhost:8080/geosync/pontos/renomear/" + id + "/" + document.getElementById(id).value);
+        }
+    </script>
+
+    <script>
+        function ativarSensor(checkbox) {
+            window.location.replace("http://localhost:8080/geosync/sensores/ativar/" + checkbox.getAttribute("data-name") + "/" + checkbox.getAttribute("id").replace("sensor", "") + "/" + checkbox.checked);
         }
     </script>
 </body>

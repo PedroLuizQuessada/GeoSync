@@ -1,4 +1,4 @@
-package com.quess.geosync.usuario;
+package exceptions;
 
 public class UsuarioNaoEncontradoException extends Exception {
     //Construtor usado para verificar se existe usuário logado

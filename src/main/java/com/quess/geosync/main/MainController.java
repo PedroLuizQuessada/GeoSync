@@ -1,7 +1,7 @@
 package com.quess.geosync.main;
 
-import com.quess.geosync.usuario.Usuario;
-import com.quess.geosync.usuario.UsuarioRepository;
+import com.quess.geosync.beans.usuario.Usuario;
+import com.quess.geosync.beans.usuario.UsuarioRepository;
 import com.quess.geosync.util.EmailUtil;
 import com.quess.geosync.util.SenhaUtil;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
