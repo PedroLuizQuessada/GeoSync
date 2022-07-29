@@ -1,5 +1,6 @@
 package com.quess.geosync.usuario;
 
+import com.quess.geosync.ponto.PontoService;
 import com.quess.geosync.util.SenhaUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,11 @@ import java.util.List;
 @Controller
 public class UsuarioController {
     private final UsuarioService service;
+    private final PontoService pontoService;
 
-    public UsuarioController(UsuarioService service) {
+    public UsuarioController(UsuarioService service, PontoService pontoService) {
         this.service = service;
+        this.pontoService = pontoService;
     }
 
     @GetMapping("/usuarios")
@@ -29,12 +32,25 @@ public class UsuarioController {
     public String showUsuarioForm(Model model) {
         model.addAttribute("usuario", new Usuario());
         model.addAttribute("pageTitle", "Adicionar usuário");
+        model.addAttribute("listPontos", pontoService.listAll(true));
         return "usuario_form";
     }
 
     @PostMapping("/usuarios/save")
     public String saveUsuario(Usuario usuario, RedirectAttributes ra) {
-        usuario.setSenha(SenhaUtil.criptografar(usuario.getSenha()));
+        if (usuario.getSenha().length() == 0) {
+            try {
+                Usuario usuarioSalvo = service.get(usuario.getId());
+                usuario.setSenha(usuarioSalvo.getSenha());
+            }
+            catch (UsuarioNaoEncontradoException exception) {
+                ra.addFlashAttribute("messageError", exception.getMessage());
+                return "redirect:/usuarios";
+            }
+        }
+        else {
+            usuario.setSenha(SenhaUtil.criptografar(usuario.getSenha()));
+        }
 
         try {
             usuario.setTentativasAcesso(0);
@@ -53,6 +69,7 @@ public class UsuarioController {
             Usuario usuario = service.get(id);
             model.addAttribute("usuario", usuario);
             model.addAttribute("pageTitle", String.format("Editar usuário %d", usuario.getId()));
+            model.addAttribute("listPontos", pontoService.listAll(true));
             return "usuario_form";
         }
         catch (UsuarioNaoEncontradoException e) {
