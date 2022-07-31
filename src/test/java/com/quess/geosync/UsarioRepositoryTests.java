@@ -19,7 +19,7 @@ import java.util.Optional;
 @Rollback(value = false)
 public class UsarioRepositoryTests {
     @Autowired
-    private UsuarioRepository repo;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private PontoRepository pontoRepositorio;
@@ -41,7 +41,7 @@ public class UsarioRepositoryTests {
         Assertions.assertThat(optionalPonto).isPresent();
         usuario.setCentral(optionalPonto.get());
 
-        Usuario usuarioSalvo = repo.save(usuario);
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
         Assertions.assertThat(usuarioSalvo.getId()).isNotNull();
         Assertions.assertThat(usuarioSalvo.getId()).isGreaterThan(0);
@@ -49,7 +49,7 @@ public class UsarioRepositoryTests {
 
     @Test
     public void testListAll() {
-        Iterable<Usuario> usuarios = repo.findAll();
+        Iterable<Usuario> usuarios = usuarioRepository.findAll();
         Assertions.assertThat(usuarios).hasSizeGreaterThan(0);
 
         for (Usuario usuario : usuarios) {
@@ -62,14 +62,14 @@ public class UsarioRepositoryTests {
         Integer usuarioId = 1;
         String novaSenha = senhaUtil.criptografar("teste");
 
-        Optional<Usuario> optionalUsuario = repo.findById(usuarioId);
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
         Assertions.assertThat(optionalUsuario).isPresent();
 
         Usuario usuario = optionalUsuario.get();
         usuario.setSenha(novaSenha);
-        repo.save(usuario);
+        usuarioRepository.save(usuario);
 
-        Optional<Usuario> usuarioAtualizadoOptional = repo.findById(usuarioId);
+        Optional<Usuario> usuarioAtualizadoOptional = usuarioRepository.findById(usuarioId);
         Assertions.assertThat(usuarioAtualizadoOptional).isPresent();
         Usuario usuarioAtualizado = usuarioAtualizadoOptional.get();
         Assertions.assertThat(usuarioAtualizado.getSenha()).isEqualTo((novaSenha));
@@ -78,7 +78,7 @@ public class UsarioRepositoryTests {
     @Test
     public void testGet() {
         Integer usuarioId = 3;
-        Optional<Usuario> optionalUsuario = repo.findById(usuarioId);
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
         Assertions.assertThat(optionalUsuario).isPresent();
         System.out.println(optionalUsuario.get());
     }
@@ -86,15 +86,15 @@ public class UsarioRepositoryTests {
     @Test
     public void testDelete() {
         Integer usuarioId = 1;
-        repo.deleteById(usuarioId);
-        Optional<Usuario> optionalUsuario = repo.findById(usuarioId);
+        usuarioRepository.deleteById(usuarioId);
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
         Assertions.assertThat(optionalUsuario).isNotPresent();
     }
 
     @Test
     public void testFindUserByEmail() {
         String email = "moraes.jjoyce@gmail.com";
-        Usuario usuario = repo.findByEmail(email);
+        Usuario usuario = usuarioRepository.findByEmail(email);
         Assertions.assertThat(usuario).isNotNull();
     }
 }

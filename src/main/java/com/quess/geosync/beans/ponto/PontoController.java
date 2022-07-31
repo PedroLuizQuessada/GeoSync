@@ -16,13 +16,13 @@ import java.util.*;
 
 @Controller
 public class PontoController {
-    private final PontoService service;
+    private final PontoService pontoService;
     private final UsuarioService usuarioService;
     private final SensorService sensorService;
     private final RegistroService registroService;
 
-    public PontoController(PontoService service, UsuarioService usuarioService, SensorService sensorService, RegistroService registroService) {
-        this.service = service;
+    public PontoController(PontoService pontoService, UsuarioService usuarioService, SensorService sensorService, RegistroService registroService) {
+        this.pontoService = pontoService;
         this.usuarioService = usuarioService;
         this.sensorService = sensorService;
         this.registroService = registroService;
@@ -30,7 +30,7 @@ public class PontoController {
 
     @GetMapping("/pontos/{ativo}")
     public String showPontosList(@PathVariable("ativo") boolean ativo, Model model) {
-        model.addAttribute("listPontos", service.listAll(ativo));
+        model.addAttribute("listPontos", pontoService.listAll(ativo));
         model.addAttribute("ativos", ativo);
         model.addAttribute("listSensores", sensorService.listAll());
 
@@ -46,7 +46,7 @@ public class PontoController {
     @GetMapping("/pontos/ativotoggle/{id}")
     public String ativoTogglePonto(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
-            boolean bloqueado = service.ativoToggle(id);
+            boolean bloqueado = pontoService.ativoToggle(id);
             String mensagem = "O ponto %d foi ativado";
             if (!bloqueado) {
                 mensagem = "O ponto %d foi inativado";
@@ -62,7 +62,7 @@ public class PontoController {
     @GetMapping("/pontos/renomear/{id}/{nome}")
     public String editNomePonto(@PathVariable("id") Integer id, @PathVariable("nome") String nome, RedirectAttributes ra) {
         try {
-            service.renomear(id, nome);
+            pontoService.renomear(id, nome);
             ra.addFlashAttribute("messageSucess", String.format("O ponto %d foi renomeado", id));
         }
         catch (Exception e) {
@@ -84,7 +84,7 @@ public class PontoController {
                 throw new UsuarioNaoEncontradoException();
             }
 
-            service.adotarCentral(usuarioLogado.getId(), idCentral);
+            pontoService.adotarCentral(usuarioLogado.getId(), idCentral);
             ra.addFlashAttribute("messageSucess", String.format("Central %d adotada para o seu usuário", idCentral));
         }
         catch (UsuarioNaoEncontradoException | PontoNaoEncontradoException e) {
@@ -97,11 +97,15 @@ public class PontoController {
     @GetMapping("/pontos/consultar/{id}")
     public String consultarPonto(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         try {
-            Ponto ponto = service.get(id);
+            Ponto ponto = pontoService.get(id);
             List<String> sensoresId = Arrays.asList(ponto.getSensores().split(" "));
 
             Map<String, Object> infos = registroService.getInfos(ponto.getId(), sensoresId);
+
+            @SuppressWarnings("unchecked")
             List<String> colunas = (List<String>) infos.get("colunas");
+
+            @SuppressWarnings("unchecked")
             List<Map<String, String>> registros = (List<Map<String, String>>) infos.get("registros");
 
             model.addAttribute("pageTitle", String.format("Consultar ponto %s", ponto.getNome()));

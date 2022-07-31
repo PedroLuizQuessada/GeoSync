@@ -8,14 +8,14 @@ import java.util.Optional;
 
 @Service
 public class SensorService {
-    private final SensorRepository repo;
+    private final SensorRepository sensorRepository;
 
-    public SensorService(SensorRepository repo) {
-        this.repo = repo;
+    public SensorService(SensorRepository sensorRepository) {
+        this.sensorRepository = sensorRepository;
     }
 
     public Sensor get(Integer id) throws SensorNaoEncontradoException {
-        Optional<Sensor> optionalSensor = repo.findById(id);
+        Optional<Sensor> optionalSensor = sensorRepository.findById(id);
         if (optionalSensor.isPresent()) {
             return optionalSensor.get();
         }
@@ -24,6 +24,6 @@ public class SensorService {
         }
     }
     public List<Sensor> listAll() {
-        return (List<Sensor>) repo.findAll();
+        return (List<Sensor>) sensorRepository.findAll();
     }
 }

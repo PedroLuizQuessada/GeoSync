@@ -14,19 +14,19 @@ import java.util.List;
 
 @Controller
 public class UsuarioController {
-    private final UsuarioService service;
+    private final UsuarioService usuarioService;
     private final PontoService pontoService;
     private final SenhaUtil senhaUtil;
 
-    public UsuarioController(UsuarioService service, PontoService pontoService, SenhaUtil senhaUtil) {
-        this.service = service;
+    public UsuarioController(UsuarioService usuarioService, PontoService pontoService, SenhaUtil senhaUtil) {
+        this.usuarioService = usuarioService;
         this.pontoService = pontoService;
         this.senhaUtil = senhaUtil;
     }
 
     @GetMapping("/usuarios")
     public String showUsuariosList(Model model) {
-        List<Usuario> listUsuarios = service.listAll();
+        List<Usuario> listUsuarios = usuarioService.listAll();
         model.addAttribute("listUsuarios", listUsuarios);
         return "usuarios";
     }
@@ -43,7 +43,7 @@ public class UsuarioController {
     public String saveUsuario(Usuario usuario, RedirectAttributes ra) {
         if (usuario.getSenha().length() == 0) {
             try {
-                Usuario usuarioSalvo = service.get(usuario.getId());
+                Usuario usuarioSalvo = usuarioService.get(usuario.getId());
                 usuario.setSenha(usuarioSalvo.getSenha());
             }
             catch (UsuarioNaoEncontradoException exception) {
@@ -57,7 +57,7 @@ public class UsuarioController {
 
         try {
             usuario.setTentativasAcesso(0);
-            service.save(usuario);
+            usuarioService.save(usuario);
             ra.addFlashAttribute("messageSucess", "O usuário foi salvo com sucesso");
         }
         catch (Exception e) {
@@ -69,7 +69,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         try {
-            Usuario usuario = service.get(id);
+            Usuario usuario = usuarioService.get(id);
             model.addAttribute("usuario", usuario);
             model.addAttribute("pageTitle", String.format("Editar usuário %d", usuario.getId()));
             model.addAttribute("listPontos", pontoService.listAll(true));
@@ -84,7 +84,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
-            service.delete(id);
+            usuarioService.delete(id);
             ra.addFlashAttribute("messageSucess", String.format("O usuário %d foi deletado", id));
         }
         catch (UsuarioNaoEncontradoException e) {
@@ -96,7 +96,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/blocktoggle/{id}")
     public String blockToggleUser(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
-            boolean bloqueado = service.blockToggle(id);
+            boolean bloqueado = usuarioService.blockToggle(id);
             String mensagem = "O usuário %d foi bloqueado";
             if (!bloqueado) {
                 mensagem = "O usuário %d foi desbloqueado";
@@ -112,7 +112,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/admtoggle/{id}")
     public String admToggleUser(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
-            boolean adm = service.admToggle(id);
+            boolean adm = usuarioService.admToggle(id);
             String mensagem = "O usuário %d se tornou ADM";
             if (!adm) {
                 mensagem = "O usuário %d não é mais ADM";

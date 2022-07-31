@@ -14,24 +14,24 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService {
-    private final UsuarioRepository repo;
+    private final UsuarioRepository usuarioRepository;
     private final PontoRepository pontoRepository;
 
-    public UsuarioService(UsuarioRepository repo, PontoRepository pontoRepository) {
-        this.repo = repo;
+    public UsuarioService(UsuarioRepository usuarioRepository, PontoRepository pontoRepository) {
+        this.usuarioRepository = usuarioRepository;
         this.pontoRepository = pontoRepository;
     }
 
     public List<Usuario> listAll() {
-        return (List<Usuario>) repo.findAll();
+        return (List<Usuario>) usuarioRepository.findAll();
     }
 
     public void save(Usuario usuario) {
-        repo.save(usuario);
+        usuarioRepository.save(usuario);
     }
 
     public Usuario get(Integer id) throws UsuarioNaoEncontradoException {
-        Optional<Usuario> usuarioOptional = repo.findById(id);
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
         if (usuarioOptional.isPresent()) {
             return usuarioOptional.get();
         }
@@ -44,14 +44,14 @@ public class UsuarioService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String emailUsuarioLogado = authentication.getName();
-            return repo.findByEmail(emailUsuarioLogado);
+            return usuarioRepository.findByEmail(emailUsuarioLogado);
         }
         return null;
     }
 
     public void delete(Integer id) throws UsuarioNaoEncontradoException {
         get(id);
-        repo.deleteById(id);
+        usuarioRepository.deleteById(id);
     }
 
     public boolean blockToggle(Integer id) throws UsuarioNaoEncontradoException {
@@ -62,14 +62,14 @@ public class UsuarioService {
         else {
             usuario.setTentativasAcesso(3);
         }
-        repo.save(usuario);
+        usuarioRepository.save(usuario);
         return usuario.getTentativasAcesso() == 3;
     }
 
     public boolean admToggle(Integer id) throws UsuarioNaoEncontradoException {
         Usuario usuario = get(id);
         usuario.setAdm(!usuario.isAdm());
-        repo.save(usuario);
+        usuarioRepository.save(usuario);
         return usuario.isAdm();
     }
 

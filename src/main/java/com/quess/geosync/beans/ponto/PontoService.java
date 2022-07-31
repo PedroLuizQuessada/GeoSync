@@ -11,23 +11,23 @@ import java.util.Optional;
 
 @Service
 public class PontoService {
-    private final PontoRepository repo;
+    private final PontoRepository pontoRepository;
 
     private final UsuarioService usuarioService;
 
-    public PontoService(PontoRepository repo, UsuarioService usuarioService) {
-        this.repo = repo;
+    public PontoService(PontoRepository pontoRepository, UsuarioService usuarioService) {
+        this.pontoRepository = pontoRepository;
         this.usuarioService = usuarioService;
     }
 
     public List<Ponto> listAll(boolean ativo) {
-        List<Ponto> pontos = (List<Ponto>) repo.findAll();
+        List<Ponto> pontos = (List<Ponto>) pontoRepository.findAll();
         pontos.removeIf(ponto -> ponto.isAtivo() != ativo);
         return pontos;
     }
 
     public Ponto get(Integer id) throws PontoNaoEncontradoException {
-        Optional<Ponto> pontoOptional = repo.findById(id);
+        Optional<Ponto> pontoOptional = pontoRepository.findById(id);
         if (pontoOptional.isPresent()) {
             return pontoOptional.get();
         }
@@ -37,20 +37,20 @@ public class PontoService {
     }
 
     public void salvar(Ponto ponto) {
-        repo.save(ponto);
+        pontoRepository.save(ponto);
     }
 
     public boolean ativoToggle(Integer id) throws PontoNaoEncontradoException {
         Ponto ponto = get(id);
         ponto.setAtivo(!ponto.isAtivo());
-        repo.save(ponto);
+        pontoRepository.save(ponto);
         return ponto.isAtivo();
     }
 
     public void renomear(Integer id, String nome) throws PontoNaoEncontradoException {
         Ponto ponto = get(id);
         ponto.setNome(nome);
-        repo.save(ponto);
+        pontoRepository.save(ponto);
     }
 
     public void adotarCentral(Integer idUsuario, Integer idCentral) throws UsuarioNaoEncontradoException, PontoNaoEncontradoException {
