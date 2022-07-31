@@ -2,9 +2,38 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Consultar ponto </title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+    <title>[[${pageTitle}]]</title>
 </head>
 <body>
+    <div class="container-fluid text-center">
+        <div><h1>[[${pageTitle}]]</h1></div>
 
+        <div class="m-2">
+            <a class="h3" th:href="@{/voltar/ponto}">Voltar</a>
+        </div>
+
+        <div>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th:block th:each="coluna : ${listColunas}">
+                        <th th:text="${coluna}"/>
+                    </th:block>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="registro : ${listRegistros}">
+                    <tr>
+                        <th:block th:each="coluna : ${listColunas}">
+                            <th th:text="${registro.get(coluna)}"></th>
+                        </th:block>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

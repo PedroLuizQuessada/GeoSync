@@ -16,10 +16,12 @@ import java.util.List;
 public class UsuarioController {
     private final UsuarioService service;
     private final PontoService pontoService;
+    private final SenhaUtil senhaUtil;
 
-    public UsuarioController(UsuarioService service, PontoService pontoService) {
+    public UsuarioController(UsuarioService service, PontoService pontoService, SenhaUtil senhaUtil) {
         this.service = service;
         this.pontoService = pontoService;
+        this.senhaUtil = senhaUtil;
     }
 
     @GetMapping("/usuarios")
@@ -50,7 +52,7 @@ public class UsuarioController {
             }
         }
         else {
-            usuario.setSenha(SenhaUtil.criptografar(usuario.getSenha()));
+            usuario.setSenha(senhaUtil.criptografar(usuario.getSenha()));
         }
 
         try {

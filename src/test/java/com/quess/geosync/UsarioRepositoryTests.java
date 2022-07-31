@@ -24,6 +24,9 @@ public class UsarioRepositoryTests {
     @Autowired
     private PontoRepository pontoRepositorio;
 
+    @Autowired
+    private SenhaUtil senhaUtil;
+
     @Test
     public void testAddNew() {
         String senha = "boov2305";
@@ -31,7 +34,7 @@ public class UsarioRepositoryTests {
         Usuario usuario = new Usuario();
         usuario.setNome("Joyce");
         usuario.setEmail("moraes.jjoyce@gmail.com");
-        usuario.setSenha(SenhaUtil.criptografar(senha));
+        usuario.setSenha(senhaUtil.criptografar(senha));
         usuario.setTentativasAcesso(0);
 
         Optional<Ponto> optionalPonto = pontoRepositorio.findById(1);
@@ -57,7 +60,7 @@ public class UsarioRepositoryTests {
     @Test
     public void testUpdate() {
         Integer usuarioId = 1;
-        String novaSenha = SenhaUtil.criptografar("teste");
+        String novaSenha = senhaUtil.criptografar("teste");
 
         Optional<Usuario> optionalUsuario = repo.findById(usuarioId);
         Assertions.assertThat(optionalUsuario).isPresent();

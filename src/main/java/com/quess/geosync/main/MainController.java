@@ -19,11 +19,12 @@ import java.io.UnsupportedEncodingException;
 @Controller
 public class MainController {
     private final UsuarioRepository repo;
-
+    private final SenhaUtil senhaUtil;
     private final EmailUtil emailUtil;
 
-    public MainController(UsuarioRepository repo, EmailUtil emailUtil) {
+    public MainController(UsuarioRepository repo, SenhaUtil senhaUtil, EmailUtil emailUtil) {
         this.repo = repo;
+        this.senhaUtil = senhaUtil;
         this.emailUtil = emailUtil;
     }
 
@@ -39,6 +40,8 @@ public class MainController {
                 return "redirect:/usuarios";
 
             case "usuarios":
+
+            case "ponto":
 
             default:
                 return "redirect:/pontos/true";
@@ -58,13 +61,13 @@ public class MainController {
     @PostMapping("/recuperarsenha")
     public String recuperarSenha(HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
         String email = request.getParameter("email");
-        String novaSenha = SenhaUtil.gerarNovaSenha();
+        String novaSenha = senhaUtil.gerarNovaSenha();
 
         Usuario usuario = repo.findByEmail(email);
         if (usuario == null) {
             return "redirect:/login?emailinvalido";
         }
-        usuario.setSenha(SenhaUtil.criptografar(novaSenha));
+        usuario.setSenha(senhaUtil.criptografar(novaSenha));
         repo.save(usuario);
 
         emailUtil.enviarEmail(email, "Nova senha para acesso ao sistema GeoSync", String.format("<p>Sua senha para acesso ao GeoSync foi atualizada: <b>%s</b></p>", novaSenha));
