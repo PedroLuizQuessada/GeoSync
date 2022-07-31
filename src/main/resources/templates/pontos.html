@@ -24,11 +24,13 @@
             <input type="checkbox" id="ativos" th:checked="${ativos}"><label for="ativos" class="m-2">Ativos</label>
         </div>
 
+        <!--/*@thymesVar id="messageSucess" type="java.lang.String"*/-->
         <div th:if="${messageSucess}" class="alert alert-success alert-dismissible text-center" role="alert">
             <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
             [[${messageSucess}]]
         </div>
 
+        <!--/*@thymesVar id="messageError" type="java.lang.String"*/-->
         <div th:if="${messageError}" class="alert alert-warning alert-dismissible text-center" role="alert">
             <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
             [[${messageError}]]
@@ -58,7 +60,7 @@
                             </td>
                             <td>
                                 <a class="h4 mr-3" th:href="@{'/pontos/consultar/' + ${ponto.id}}">Consultar</a>
-                                <button class="btn btn-primary m-3" th:data-name="${ponto.id}" th:onclick="renomear(this.getAttribute('data-name'))">Renomear</button>
+                                <button class="btn btn-primary m-3" th:data-name="${ponto.id}" onclick="renomear(this)">Renomear</button>
                                 <a th:if="${ponto.ativo}" class="h4 mr-3" th:href="@{'/pontos/ativotoggle/' + ${ponto.id}}">Inativar</a>
                                 <a th:if="${!ponto.ativo}" class="h4 mr-3" th:href="@{'/pontos/ativotoggle/' + ${ponto.id}}">Ativar</a>
                                 <a th:if="${!central.equals(ponto.id)}" class="h4 mr-3" th:href="@{'/pontos/adotarcentral/' + ${ponto.id}}">Adotar central</a>
@@ -84,8 +86,8 @@
     </script>
 
     <script>
-        function renomear(id) {
-            window.location.replace("http://localhost:8080/geosync/pontos/renomear/" + id + "/" + document.getElementById(id).value);
+        function renomear(botao) {
+            window.location.replace("http://localhost:8080/geosync/pontos/renomear/" + botao.getAttribute('data-name') + "/" + document.getElementById(botao.getAttribute('data-name')).value);
         }
     </script>
 
