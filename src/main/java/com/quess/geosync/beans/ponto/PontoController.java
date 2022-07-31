@@ -6,6 +6,7 @@ import com.quess.geosync.beans.usuario.Usuario;
 import exceptions.UsuarioNaoEncontradoException;
 import com.quess.geosync.beans.usuario.UsuarioService;
 import exceptions.PontoNaoEncontradoException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,13 @@ import java.util.*;
 
 @Controller
 public class PontoController {
+
+    @Value("${server.link}")
+    private String servidorLink;
+
+    @Value("${server.servlet.context-path}")
+    private String servidorContextPath;
+
     private final PontoService pontoService;
     private final UsuarioService usuarioService;
     private final SensorService sensorService;
@@ -39,6 +47,9 @@ public class PontoController {
             model.addAttribute("central", idCentral);
         }
         catch (UsuarioNaoEncontradoException | PontoNaoEncontradoException ignored) {}
+
+        model.addAttribute("link", servidorLink);
+        model.addAttribute("contextPath", servidorContextPath);
 
         return "pontos";
     }

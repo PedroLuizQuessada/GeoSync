@@ -16,7 +16,7 @@
             </form>
         </div>
 
-        <div><h1>Pontos</h1></div>
+        <div><h1 id="infos" th:link="${link}" th:context-path="${contextPath}">Pontos</h1></div>
         <div class="m-2">
             <a class="h3" th:href="@{/usuarios}">Gerenciar usuários</a>
         </div>
@@ -77,9 +77,9 @@
         $(document).ready(function () {
             $("#ativos").click(function () {
                 if ($(this).is(":checked")) {
-                    window.location.replace("http://localhost:8080/geosync/pontos/true");
+                    window.location.replace("http://" + document.getElementById("infos").getAttribute("link") + document.getElementById("infos").getAttribute("context-path") + "/pontos/true");
                 } else {
-                    window.location.replace("http://localhost:8080/geosync/pontos/false");
+                    window.location.replace("http://" + document.getElementById("infos").getAttribute("link") + document.getElementById("infos").getAttribute("context-path") + "/pontos/false");
                 }
             });
         });
@@ -87,13 +87,13 @@
 
     <script>
         function renomear(botao) {
-            window.location.replace("http://localhost:8080/geosync/pontos/renomear/" + botao.getAttribute('data-name') + "/" + document.getElementById(botao.getAttribute('data-name')).value);
+            window.location.replace("http://" + document.getElementById("infos").getAttribute("link") + document.getElementById("infos").getAttribute("context-path") + "/pontos/renomear/" + botao.getAttribute('data-name') + "/" + document.getElementById(botao.getAttribute('data-name')).value);
         }
     </script>
 
     <script>
         function ativarSensor(checkbox) {
-            window.location.replace("http://localhost:8080/geosync/sensores/ativar/" + checkbox.getAttribute("data-name") + "/" + checkbox.getAttribute("id").replace("sensor", "") + "/" + checkbox.checked);
+            window.location.replace("http://" + document.getElementById("infos").getAttribute("link") + document.getElementById("infos").getAttribute("context-path") + "/sensores/ativar/" + checkbox.getAttribute("data-name") + "/" + checkbox.getAttribute("id").replace("sensor", "") + "/" + checkbox.checked);
         }
     </script>
 </body>
