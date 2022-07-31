@@ -11,11 +11,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class SensorController {
-    private final SensorService service;
+    private final SensorService sensorService;
     private final PontoService pontoService;
 
-    public SensorController(SensorService service, PontoService pontoService) {
-        this.service = service;
+    public SensorController(SensorService sensorService, PontoService pontoService) {
+        this.sensorService = sensorService;
         this.pontoService = pontoService;
     }
 
@@ -23,7 +23,7 @@ public class SensorController {
     public String salvarSensor(@PathVariable("idponto") Integer idPonto, @PathVariable("idsensor") Integer idSensor, @PathVariable("incluir") boolean incluir, RedirectAttributes ra) {
         try {
             Ponto ponto = pontoService.get(idPonto);
-            Sensor sensor = service.get(idSensor);
+            Sensor sensor = sensorService.get(idSensor);
 
             String sensores = ponto.getSensores().replace(String.format("%d", idSensor), "").trim();
             String mensagem = "removido do";

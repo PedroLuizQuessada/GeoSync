@@ -14,7 +14,7 @@ import org.springframework.test.annotation.Rollback;
 @Rollback(value = false)
 public class PontoRepositoryTests {
     @Autowired
-    private PontoRepository repo;
+    private PontoRepository pontoRepository;
 
     @Test
     public void testAddNew() {
@@ -22,7 +22,7 @@ public class PontoRepositoryTests {
         ponto.setNome("Motoboy A");
         ponto.setAtivo(false);
 
-        Ponto pontoSalvo = repo.save(ponto);
+        Ponto pontoSalvo = pontoRepository.save(ponto);
 
         Assertions.assertThat(pontoSalvo.getId()).isNotNull();
         Assertions.assertThat(pontoSalvo.getId()).isGreaterThan(0);

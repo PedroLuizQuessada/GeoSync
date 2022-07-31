@@ -20,7 +20,7 @@ import java.util.Optional;
 public class RegistroRepositoryTests {
 
     @Autowired
-    private RegistroRepository repo;
+    private RegistroRepository registroRepository;
 
     @Autowired
     private PontoRepository pontoRepository;
@@ -40,7 +40,7 @@ public class RegistroRepositoryTests {
         registro.setVelocidade(10.26F);
         registro.setSentido(0.62F);
 
-        Registro registroSalvo = repo.save(registro);
+        Registro registroSalvo = registroRepository.save(registro);
 
         Assertions.assertThat(registroSalvo.getId()).isNotNull();
         Assertions.assertThat(registroSalvo.getId()).isGreaterThan(0);

@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Service
 public class RegistroService {
-    private final RegistroRepository repo;
+    private final RegistroRepository registroRepository;
     private final ConversorUtil conversorUtil;
 
     private final String COLUNA_DATA_HORA = "Data e hora";
@@ -20,8 +20,8 @@ public class RegistroService {
     private final String COLUNA_VELOCIDADE = "Velocidade";
     private final String COLUNA_SENTIDO = "Sentido";
 
-    public RegistroService(RegistroRepository repo, ConversorUtil conversorUtil) {
-        this.repo = repo;
+    public RegistroService(RegistroRepository registroRepository, ConversorUtil conversorUtil) {
+        this.registroRepository = registroRepository;
         this.conversorUtil = conversorUtil;
     }
 
@@ -53,7 +53,7 @@ public class RegistroService {
     }
 
     private List<Registro> listAllByPontoId(Integer id) {
-        List<Registro> registros = (List<Registro>) repo.findAll();
+        List<Registro> registros = (List<Registro>) registroRepository.findAll();
         registros.removeIf(registro -> !registro.getPonto().getId().equals(id));
         return registros;
     }

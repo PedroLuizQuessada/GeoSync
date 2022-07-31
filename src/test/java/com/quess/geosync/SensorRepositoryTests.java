@@ -14,14 +14,14 @@ import org.springframework.test.annotation.Rollback;
 @Rollback(value = false)
 public class SensorRepositoryTests {
     @Autowired
-    private SensorRepository repo;
+    private SensorRepository sensorRepository;
 
     @Test
     public void testAddNew() {
         Sensor sensor = new Sensor();
         sensor.setNome("GPS");
 
-        Sensor sensorSalvo = repo.save(sensor);
+        Sensor sensorSalvo = sensorRepository.save(sensor);
 
         Assertions.assertThat(sensorSalvo.getId()).isNotNull();
         Assertions.assertThat(sensorSalvo.getId()).isGreaterThan(0);
