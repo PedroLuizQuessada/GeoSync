@@ -1,5 +1,6 @@
 package com.quess.geosync.util;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,12 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class EmailUtil {
 
+    @Value("${spring.mail.nome}")
+    private String emailQuessNome;
+
+    @Value("${spring.mail.username}")
+    private String emailQuessEndereco;
+
     private final JavaMailSender mailSender;
 
     public EmailUtil(JavaMailSender mailSender) {
@@ -21,7 +28,7 @@ public class EmailUtil {
         MimeMessage email = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(email);
 
-        helper.setFrom("quesssystems@gmail.com", "Quess Systems Suporte");
+        helper.setFrom(emailQuessEndereco, emailQuessNome);
         helper.setTo(destinatario);
         helper.setSubject(assunto);
         helper.setText(mensagem, true);
