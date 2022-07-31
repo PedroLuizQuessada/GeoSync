@@ -1,5 +1,6 @@
 package com.quess.geosync.beans.ponto;
 
+import com.quess.geosync.beans.registro.Registro;
 import com.quess.geosync.beans.usuario.Usuario;
 
 import javax.persistence.*;
@@ -20,6 +21,9 @@ public class Ponto {
 
     @OneToMany
     private List<Usuario> usuarios;
+
+    @OneToMany
+    private List<Registro> registros;
 
     @Column
     private String sensores;

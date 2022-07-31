@@ -1,5 +1,6 @@
 package com.quess.geosync.beans.ponto;
 
+import com.quess.geosync.beans.registro.RegistroService;
 import com.quess.geosync.beans.sensor.SensorService;
 import com.quess.geosync.beans.usuario.Usuario;
 import exceptions.UsuarioNaoEncontradoException;
@@ -11,16 +12,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.*;
+
 @Controller
 public class PontoController {
     private final PontoService service;
     private final UsuarioService usuarioService;
     private final SensorService sensorService;
+    private final RegistroService registroService;
 
-    public PontoController(PontoService service, UsuarioService usuarioService, SensorService sensorService) {
+    public PontoController(PontoService service, UsuarioService usuarioService, SensorService sensorService, RegistroService registroService) {
         this.service = service;
         this.usuarioService = usuarioService;
         this.sensorService = sensorService;
+        this.registroService = registroService;
     }
 
     @GetMapping("/pontos/{ativo}")
@@ -87,5 +92,26 @@ public class PontoController {
         }
 
         return "redirect:/pontos/true";
+    }
+
+    @GetMapping("/pontos/consultar/{id}")
+    public String consultarPonto(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+        try {
+            Ponto ponto = service.get(id);
+            List<String> sensoresId = Arrays.asList(ponto.getSensores().split(" "));
+
+            Map<String, Object> infos = registroService.getInfos(ponto.getId(), sensoresId);
+            List<String> colunas = (List<String>) infos.get("colunas");
+            List<Map<String, String>> registros = (List<Map<String, String>>) infos.get("registros");
+
+            model.addAttribute("pageTitle", String.format("Consultar ponto %s", ponto.getNome()));
+            model.addAttribute("listColunas", colunas);
+            model.addAttribute("listRegistros", registros);
+            return "ponto";
+        }
+        catch (PontoNaoEncontradoException e) {
+            ra.addFlashAttribute("messageError", e.getMessage());
+            return "redirect:/pontos/true";
+        }
     }
 }
