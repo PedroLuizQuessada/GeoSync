@@ -2,6 +2,7 @@ package com.quess.geosync.beans.usuario;
 
 import com.quess.geosync.beans.ponto.PontoService;
 import com.quess.geosync.util.SenhaUtil;
+import exceptions.UsuarioNaoAdmException;
 import exceptions.UsuarioNaoEncontradoException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,13 @@ public class UsuarioController {
 
     @GetMapping("/usuarios")
     public String showUsuariosList(Model model) {
+        try {
+            checarAdm();
+        }
+        catch (Exception e) {
+            return "redirect:/pontos/true?acessonegado";
+        }
+
         List<Usuario> listUsuarios = usuarioService.listAll();
         model.addAttribute("listUsuarios", listUsuarios);
         return "usuarios";
@@ -33,6 +41,13 @@ public class UsuarioController {
 
     @GetMapping("/usuarios/new")
     public String showUsuarioForm(Model model) {
+        try {
+            checarAdm();
+        }
+        catch (Exception e) {
+            return "redirect:/pontos/true?acessonegado";
+        }
+
         model.addAttribute("usuario", new Usuario());
         model.addAttribute("pageTitle", "Adicionar usuário");
         model.addAttribute("listPontos", pontoService.listAll(true));
@@ -41,6 +56,13 @@ public class UsuarioController {
 
     @PostMapping("/usuarios/save")
     public String saveUsuario(Usuario usuario, RedirectAttributes ra) {
+        try {
+            checarAdm();
+        }
+        catch (Exception e) {
+            return "redirect:/pontos/true?acessonegado";
+        }
+
         if (usuario.getSenha().length() == 0) {
             try {
                 Usuario usuarioSalvo = usuarioService.get(usuario.getId());
@@ -69,6 +91,13 @@ public class UsuarioController {
     @GetMapping("/usuarios/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         try {
+            checarAdm();
+        }
+        catch (Exception e) {
+            return "redirect:/pontos/true?acessonegado";
+        }
+
+        try {
             Usuario usuario = usuarioService.get(id);
             model.addAttribute("usuario", usuario);
             model.addAttribute("pageTitle", String.format("Editar usuário %d", usuario.getId()));
@@ -84,6 +113,13 @@ public class UsuarioController {
     @GetMapping("/usuarios/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
+            checarAdm();
+        }
+        catch (Exception e) {
+            return "redirect:/pontos/true?acessonegado";
+        }
+
+        try {
             usuarioService.delete(id);
             ra.addFlashAttribute("messageSucess", String.format("O usuário %d foi deletado", id));
         }
@@ -95,6 +131,13 @@ public class UsuarioController {
 
     @GetMapping("/usuarios/blocktoggle/{id}")
     public String blockToggleUser(@PathVariable("id") Integer id, RedirectAttributes ra) {
+        try {
+            checarAdm();
+        }
+        catch (Exception e) {
+            return "redirect:/pontos/true?acessonegado";
+        }
+
         try {
             boolean bloqueado = usuarioService.blockToggle(id);
             String mensagem = "O usuário %d foi bloqueado";
@@ -112,6 +155,13 @@ public class UsuarioController {
     @GetMapping("/usuarios/admtoggle/{id}")
     public String admToggleUser(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
+            checarAdm();
+        }
+        catch (Exception e) {
+            return "redirect:/pontos/true?acessonegado";
+        }
+
+        try {
             boolean adm = usuarioService.admToggle(id);
             String mensagem = "O usuário %d se tornou ADM";
             if (!adm) {
@@ -123,5 +173,11 @@ public class UsuarioController {
             ra.addFlashAttribute("messageError", e.getMessage());
         }
         return "redirect:/usuarios";
+    }
+
+    private void checarAdm() throws UsuarioNaoAdmException, UsuarioNaoEncontradoException {
+        if (!usuarioService.getUsuarioLogado().isAdm()) {
+            throw new UsuarioNaoAdmException();
+        }
     }
  }

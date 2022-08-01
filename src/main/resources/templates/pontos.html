@@ -18,10 +18,15 @@
 
         <div><h1 id="infos" th:link="${link}" th:context-path="${contextPath}">Pontos</h1></div>
         <div class="m-2">
-            <a class="h3" th:href="@{/usuarios}">Gerenciar usuários</a>
+            <a class="h3" th:if="${adm}" th:href="@{/usuarios}">Gerenciar usuários</a>
         </div>
         <div class="m-2">
             <input type="checkbox" id="ativos" th:checked="${ativos}"><label for="ativos" class="m-2">Ativos</label>
+        </div>
+
+        <div th:if="${param.acessonegado}" class="alert alert-warning alert-dismissible text-center" role="alert">
+            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            Sua conta não tem acesso a esse serviço
         </div>
 
         <!--/*@thymesVar id="messageSucess" type="java.lang.String"*/-->

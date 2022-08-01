@@ -45,6 +45,7 @@ public class PontoController {
         try {
             Integer idCentral = usuarioService.getCentral(usuarioService.getUsuarioLogado().getId());
             model.addAttribute("central", idCentral);
+            model.addAttribute("adm", usuarioService.getUsuarioLogado().isAdm());
         }
         catch (UsuarioNaoEncontradoException | PontoNaoEncontradoException ignored) {}
 
